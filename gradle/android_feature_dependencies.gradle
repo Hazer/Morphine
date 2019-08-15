@@ -1,0 +1,39 @@
+/**
+ * Feature dependencies
+ */
+apply plugin: 'com.android.library'
+apply from: '../../gradle/android_commons.gradle'
+apply from: '../../gradle/android_dependencies.gradle'
+
+dependencies {
+    implementation project(Modules.commonAndroid)
+    implementation project(Modules.commonDomain)
+
+    // KODEIN
+    implementation Libraries.kodeinJvm
+    implementation AndroidLibraries.kodeinAndroid
+
+    kapt AndroidLibraries.databinding
+
+    implementation project(Modules.libs.sulfate.annotations)
+    kapt project(Modules.libs.sulfate.erased)
+
+    // TEST
+
+    testImplementation project(Modules.commonTest)
+    testImplementation TestLibraries.androidTestRunner
+    testImplementation TestLibraries.junit
+    testImplementation TestLibraries.mockk
+    testImplementation TestLibraries.archCoreTest
+
+    androidTestImplementation project(Modules.commonTest)
+    androidTestImplementation TestLibraries.androidTestRunner
+    androidTestImplementation TestLibraries.junit
+    androidTestImplementation TestLibraries.mockkAndroid
+    androidTestImplementation TestLibraries.fragment
+    androidTestImplementation TestLibraries.espresso
+    androidTestImplementation TestLibraries.espressoContrib
+    androidTestImplementation TestLibraries.archCoreTest
+
+    kaptAndroidTest TestLibraries.databinding
+}

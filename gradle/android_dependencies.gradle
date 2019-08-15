@@ -1,0 +1,31 @@
+apply plugin: 'kotlin-kapt'
+/**
+ * Shared dependencies between modules
+ */
+dependencies {
+    // KOTLIN
+    implementation KotlinLibraries.kotlinJvm
+    implementation KotlinLibraries.kotlinCoroutineJvmCore
+    implementation KotlinLibraries.kotlinxSerializationJvm
+
+    implementation AndroidLibraries.kotlinCoroutineAndroid
+
+    implementation Libraries.kodeinJvm
+    implementation AndroidLibraries.kodeinAndroid
+
+    implementation AndroidLibraries.threetenAbp
+
+    // ANDROID
+    implementation AndroidLibraries.appCompat
+    implementation AndroidLibraries.coreKtx
+    implementation AndroidLibraries.constraintLayout
+    implementation AndroidLibraries.lifecycleViewModel
+    implementation AndroidLibraries.lifecycleExtensions
+    implementation AndroidLibraries.recyclerView
+
+    implementation AndroidLibraries.navigation
+    implementation AndroidLibraries.navigationFrag
+
+    androidTestImplementation TestLibraries.junit
+    testImplementation TestLibraries.junit
+}

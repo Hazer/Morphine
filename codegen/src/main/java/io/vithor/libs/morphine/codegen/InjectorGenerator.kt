@@ -1,0 +1,209 @@
+package io.vithor.kodein.sulfate.codegen
+
+import com.squareup.kotlinpoet.asTypeName
+import io.vithor.kodein.sulfate.RetrofitInjector
+import io.vithor.kodein.sulfate.Injector
+import java.io.File
+import javax.annotation.processing.AbstractProcessor
+import javax.annotation.processing.Messager
+import javax.annotation.processing.ProcessingEnvironment
+import javax.annotation.processing.RoundEnvironment
+import javax.lang.model.SourceVersion
+import javax.lang.model.element.ElementKind
+import javax.lang.model.element.ExecutableElement
+import javax.lang.model.element.TypeElement
+import javax.lang.model.util.Elements
+import javax.lang.model.util.Types
+
+
+abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractProcessor() {
+
+    companion object {
+        const val KAPT_KOTLIN_GENERATED_OPTION_NAME = "kapt.kotlin.generated"
+    }
+
+    private lateinit var elementUtils: Elements
+    private lateinit var typeUtils: Types
+    private lateinit var messager: Messager
+
+    private lateinit var imports: MutableMap<String, MutableList<ModuleBuilder>>
+
+    override fun init(processingEnv: ProcessingEnvironment) {
+        super.init(processingEnv)
+        typeUtils = processingEnv.typeUtils
+        elementUtils = processingEnv.elementUtils
+        messager = processingEnv.messager
+
+        imports = mutableMapOf()
+    }
+
+    override fun getSupportedAnnotationTypes(): MutableSet<String> {
+        return mutableSetOf(Injector::class.java.name, RetrofitInjector::class.java.name)
+    }
+
+    override fun getSupportedSourceVersion(): SourceVersion {
+        return SourceVersion.latest()
+    }
+
+    override fun process(set: MutableSet<out TypeElement>?, roundEnvironment: RoundEnvironment?): Boolean {
+
+        roundEnvironment?.getElementsAnnotatedWith(Injector::class.java)
+            ?.forEach {
+                val className = it.simpleName.toString()
+                val typeEl = it as TypeElement
+
+                // typeEl.enclosingElement
+
+                val superClassTypeName = typeEl.superclass.asTypeName().toString().substringAfterLast('.')
+
+                val constructorElm = it.enclosedElements.first { element -> element.kind == ElementKind.CONSTRUCTOR } as? ExecutableElement
+
+                val pack = processingEnv.elementUtils.getPackageOf(it).toString()
+
+                val importOnce: Boolean = typeEl.getAnnotation(Injector::class.java).importOnce
+
+                generateModuleOfClass(superClassTypeName, importOnce, className, pack, constructorElm)
+            }
+
+        roundEnvironment?.getElementsAnnotatedWith(RetrofitInjector::class.java)
+            ?.forEach {
+                val className = it.simpleName.toString()
+                val typeEl = it as TypeElement
+
+                // typeEl.enclosingElement
+
+                val superClassTypeName = "RetrofitResource"
+
+                val pack = processingEnv.elementUtils.getPackageOf(it).toString()
+
+                val importOnce: Boolean = typeEl.getAnnotation(RetrofitInjector::class.java).importOnce
+
+                generateModuleOfAPI(superClassTypeName, importOnce, className, pack)
+            }
+
+        if (roundEnvironment!!.processingOver()) {
+            // TODO: Find a way to generate AllInjectors instance in the root package.
+            generateAllModules()
+        }
+
+        return true
+    }
+
+    // TODO: Migrate to KotlinPoet
+    private fun generateAllModules() {
+        val commonPackage = imports.keys.map { it.substringBeforeLast('.') }.fold("") { acc, next ->
+            if (acc.isBlank()) return@fold next
+
+            if (next.isBlank()) throw IllegalStateException("Module package must not be empty, generation failed")
+
+            return@fold acc.takeWhileIndexed { index, char ->
+                next.getOrNull(index) == char
+            }
+        }.removeSuffix(".")
+
+        val injector = allModulesTemplate(commonPackage, imports, ::generateModuleOfClassModules)
+
+        val kaptKotlinGeneratedDir = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME]
+        val file = File(kaptKotlinGeneratedDir, "${commonPackage.replace('.', '_')}_AllInjectors.kt")
+        file.writeText(injector)
+    }
+
+    private fun generateModuleOfClassModules(key: String) {
+        val imports = imports[key] ?: return
+
+        val first = imports.first()
+
+        val groupName = first.groupName
+
+        val commonPackage = imports.map { it.packageName }.fold("") { acc, next ->
+            if (acc.isBlank()) return@fold next
+
+            if (next.isBlank()) throw IllegalStateException("Module package must not be empty, generation failed")
+
+            return@fold acc.takeWhileIndexed { index, char ->
+                next.getOrNull(index) == char
+            }
+        }.removeSuffix(".")
+
+        val packageName = commonPackage//first.packageName
+
+        val groupQualifiedName = key
+
+        val injector = groupModuleTemplate(packageName, groupName, imports)
+
+        val kaptKotlinGeneratedDir = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME]
+        val file = File(kaptKotlinGeneratedDir, "${groupQualifiedName.replace('.', '_')}.kt")
+        file.writeText(injector)
+    }
+
+
+    private fun generateModuleOfClass(superClassTypeName: String,
+                                      importOnce: Boolean,
+                                      originalClassName: String,
+                                      pack: String,
+                                      constructorElm: ExecutableElement?
+    ) {
+        val newClassName = "${originalClassName}_Module"
+
+        val generatedClass = KotlinKodeinModuleBuilder(
+            isKodeinErased,
+            importOnce,
+            superClassTypeName,
+            newClassName,
+            pack,
+            originalClassName,
+            constructorElm,
+            processingEnv
+        )
+
+        val actual = imports.getOrPut(generatedClass.groupQualifiedName) {
+            mutableListOf()
+        }
+
+        actual.add(generatedClass)
+
+        imports[generatedClass.groupQualifiedName] = actual
+
+        val fileContent = generatedClass.getContent()
+
+        val kaptKotlinGeneratedDir = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME]
+
+        val file = File(kaptKotlinGeneratedDir, "${pack.replace('.', '_')}.$newClassName.kt")
+
+        file.writeText(fileContent)
+    }
+
+
+    private fun generateModuleOfAPI(superClassTypeName: String,
+                                      importOnce: Boolean,
+                                      originalClassName: String,
+                                      pack: String
+    ) {
+        val newClassName = "${originalClassName}_Module"
+
+        val generatedClass = RetrofitModuleBuilder(
+            isKodeinErased,
+            importOnce,
+            superClassTypeName,
+            newClassName,
+            pack,
+            originalClassName
+        )
+
+        val actual = imports.getOrPut(generatedClass.groupQualifiedName) {
+            mutableListOf()
+        }
+
+        actual.add(generatedClass)
+
+        imports[generatedClass.groupQualifiedName] = actual
+
+        val fileContent = generatedClass.getContent()
+
+        val kaptKotlinGeneratedDir = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME]
+
+        val file = File(kaptKotlinGeneratedDir, "${pack.replace('.', '_')}.$newClassName.kt")
+
+        file.writeText(fileContent)
+    }
+}

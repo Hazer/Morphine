@@ -1,0 +1,57 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+//apply plugin: "com.github.ben-manes.versions"
+
+buildscript {
+    ext.kotlin_version = Versions.kotlin
+    repositories {
+        google()
+        gradlePluginPortal()
+        mavenCentral()
+        jcenter()
+        maven { url "https://kotlin.bintray.com/kotlinx" }
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:${Versions.gradle}"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:${Versions.kotlin}"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:${Versions.kotlin}"
+        // classpath "com.github.ben-manes:gradle-versions-plugin:${Versions.versionsChecker}"
+        // classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.6'
+
+        // classpath "org.jlleitschuh.gradle:ktlint-gradle:7.4.0"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url "https://kotlin.bintray.com/kotlinx" }
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            jvmTarget = "1.8"
+            freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
+        }
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
+    }
+}
+
+wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
