@@ -1,13 +1,13 @@
-package io.vithor.kodein.sulfate.codegen
+package io.vithor.libs.morphine.codegen
 
 import com.squareup.kotlinpoet.asTypeName
-import io.vithor.kodein.sulfate.RetrofitInjector
-import io.vithor.kodein.sulfate.Injector
 import java.io.File
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.Messager
 import javax.annotation.processing.ProcessingEnvironment
 import javax.annotation.processing.RoundEnvironment
+import javax.inject.Inject
+import javax.inject.Named
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.ElementKind
 import javax.lang.model.element.ExecutableElement
@@ -38,14 +38,25 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
     }
 
     override fun getSupportedAnnotationTypes(): MutableSet<String> {
-        return mutableSetOf(Injector::class.java.name, RetrofitInjector::class.java.name)
+        return mutableSetOf(
+            Injector::class.java.name,
+            RetrofitInjector::class.java.name,
+            Inject::class.java.name,
+            Named::class.java.name)
     }
 
     override fun getSupportedSourceVersion(): SourceVersion {
         return SourceVersion.latest()
     }
 
-    override fun process(set: MutableSet<out TypeElement>?, roundEnvironment: RoundEnvironment?): Boolean {
+    override fun process(
+        set: MutableSet<out TypeElement>?,
+        roundEnvironment: RoundEnvironment?
+    ): Boolean {
+
+        roundEnvironment?.getElementsAnnotatedWith(Inject::class.java)?.forEach {
+            throw IllegalStateException("Found ${it.simpleName}")
+        }
 
         roundEnvironment?.getElementsAnnotatedWith(Injector::class.java)
             ?.forEach {
@@ -54,15 +65,23 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
 
                 // typeEl.enclosingElement
 
-                val superClassTypeName = typeEl.superclass.asTypeName().toString().substringAfterLast('.')
+                val superClassTypeName =
+                    typeEl.superclass.asTypeName().toString().substringAfterLast('.')
 
-                val constructorElm = it.enclosedElements.first { element -> element.kind == ElementKind.CONSTRUCTOR } as? ExecutableElement
+                val constructorElm =
+                    it.enclosedElements.first { element -> element.kind == ElementKind.CONSTRUCTOR } as? ExecutableElement
 
                 val pack = processingEnv.elementUtils.getPackageOf(it).toString()
 
                 val importOnce: Boolean = typeEl.getAnnotation(Injector::class.java).importOnce
 
-                generateModuleOfClass(superClassTypeName, importOnce, className, pack, constructorElm)
+                generateModuleOfClass(
+                    superClassTypeName,
+                    importOnce,
+                    className,
+                    pack,
+                    constructorElm
+                )
             }
 
         roundEnvironment?.getElementsAnnotatedWith(RetrofitInjector::class.java)
@@ -76,7 +95,8 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
 
                 val pack = processingEnv.elementUtils.getPackageOf(it).toString()
 
-                val importOnce: Boolean = typeEl.getAnnotation(RetrofitInjector::class.java).importOnce
+                val importOnce: Boolean =
+                    typeEl.getAnnotation(RetrofitInjector::class.java).importOnce
 
                 generateModuleOfAPI(superClassTypeName, importOnce, className, pack)
             }
@@ -104,7 +124,8 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
         val injector = allModulesTemplate(commonPackage, imports, ::generateModuleOfClassModules)
 
         val kaptKotlinGeneratedDir = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME]
-        val file = File(kaptKotlinGeneratedDir, "${commonPackage.replace('.', '_')}_AllInjectors.kt")
+        val file =
+            File(kaptKotlinGeneratedDir, "${commonPackage.replace('.', '_')}_AllInjectors.kt")
         file.writeText(injector)
     }
 
@@ -137,11 +158,12 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
     }
 
 
-    private fun generateModuleOfClass(superClassTypeName: String,
-                                      importOnce: Boolean,
-                                      originalClassName: String,
-                                      pack: String,
-                                      constructorElm: ExecutableElement?
+    private fun generateModuleOfClass(
+        superClassTypeName: String,
+        importOnce: Boolean,
+        originalClassName: String,
+        pack: String,
+        constructorElm: ExecutableElement?
     ) {
         val newClassName = "${originalClassName}_Module"
 
@@ -174,10 +196,11 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
     }
 
 
-    private fun generateModuleOfAPI(superClassTypeName: String,
-                                      importOnce: Boolean,
-                                      originalClassName: String,
-                                      pack: String
+    private fun generateModuleOfAPI(
+        superClassTypeName: String,
+        importOnce: Boolean,
+        originalClassName: String,
+        pack: String
     ) {
         val newClassName = "${originalClassName}_Module"
 

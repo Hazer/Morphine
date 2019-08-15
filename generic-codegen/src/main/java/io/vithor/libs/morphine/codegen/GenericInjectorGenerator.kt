@@ -1,6 +1,7 @@
 package io.vithor.kodein.sulfate.codegen
 
 import com.google.auto.service.AutoService
+import io.vithor.libs.morphine.codegen.InjectorGenerator
 import javax.annotation.processing.Processor
 import javax.annotation.processing.SupportedOptions
 import javax.annotation.processing.SupportedSourceVersion

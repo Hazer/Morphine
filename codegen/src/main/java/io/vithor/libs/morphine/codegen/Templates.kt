@@ -1,8 +1,9 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package io.vithor.kodein.sulfate.codegen
+package io.vithor.libs.morphine.codegen
 
 import io.vithor.kodein.sulfate.Tagged
+import javax.inject.Named
 
 const val INJECTION_METHOD = "instance"
 // TODO: Migrate to KotlinPoet
@@ -62,6 +63,9 @@ inline fun retrofitFactoryModule(
 
 // TODO: Migrate to KotlinPoet
 inline fun injectionMethodTagged(tagged: Tagged) = """$INJECTION_METHOD(tag = "${tagged.tag}")"""
+
+// TODO: Migrate to KotlinPoet
+inline fun injectionMethodNamed(named: Named) = """$INJECTION_METHOD(tag = "${named.value}")"""
 
 // TODO: Migrate to KotlinPoet
 inline fun importMethod(module: ModuleBuilder): String = if (module.importOnce) "importOnce" else "import"

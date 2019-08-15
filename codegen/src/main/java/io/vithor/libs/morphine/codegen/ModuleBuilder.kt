@@ -1,4 +1,4 @@
-package io.vithor.kodein.sulfate.codegen
+package io.vithor.libs.morphine.codegen
 
 interface ModuleBuilder {
     val erased: Boolean

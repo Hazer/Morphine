@@ -1,4 +1,4 @@
-package io.vithor.kodein.sulfate.codegen
+package io.vithor.libs.morphine.codegen
 
 class RetrofitModuleBuilder(override val erased: Boolean,
                                 override val importOnce: Boolean,

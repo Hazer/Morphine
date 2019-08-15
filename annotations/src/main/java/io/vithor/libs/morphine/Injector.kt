@@ -1,4 +1,4 @@
-package io.vithor.kodein.sulfate
+package io.vithor.libs.morphine
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)

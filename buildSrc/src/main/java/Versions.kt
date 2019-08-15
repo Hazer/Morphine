@@ -2,8 +2,8 @@
 
 object Versions {
     // Build
-    const val kotlin = "1.3.31"
-    const val gradle = "3.5.0-beta01"
+    const val kotlin = "1.3.41"
+    const val gradle = "3.5.0-rc03"
 
     const val compileSdk = 28
     const val minSdk = 21
@@ -39,7 +39,7 @@ object Versions {
 
     // Other
     const val coroutines = "1.2.1"
-    const val kodein = "6.2.0"
+    const val kodein = "6.3.3"
     const val timber = "4.7.1"
     const val threeten = "1.2.0"
     const val kotlinxSerialization = "0.11.0"

@@ -11,10 +11,10 @@ sourceSets {
 }
 
 dependencies {
-    kapt project(":libs:sulfate:annotations")
-    compileOnly project(':libs:sulfate:annotations')
+    kapt project(Modules.annotations)
+    compileOnly project(Modules.annotations)
 
-    api project(":libs:sulfate:codegen")
+    api project(Modules.core)
 
     // configuration generator for service providers
     implementation "com.google.auto.service:auto-service:1.0-rc5"

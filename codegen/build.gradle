@@ -18,8 +18,8 @@ repositories {
 }
 
 dependencies {
-    kapt project(Modules.libs.sulfate.annotations)
-    compileOnly project(Modules.libs.sulfate.annotations)
+    kapt project(Modules.annotations)
+    compileOnly project(Modules.annotations)
     implementation Libraries.kodeinJvm
     api KotlinLibraries.kotlinJvm
 

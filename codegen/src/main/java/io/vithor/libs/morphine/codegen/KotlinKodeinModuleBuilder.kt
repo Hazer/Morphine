@@ -1,8 +1,9 @@
-package io.vithor.kodein.sulfate.codegen
+package io.vithor.libs.morphine.codegen
 
 import com.squareup.kotlinpoet.asTypeName
 import io.vithor.kodein.sulfate.Tagged
 import javax.annotation.processing.ProcessingEnvironment
+import javax.inject.Named
 import javax.lang.model.element.ExecutableElement
 
 // TODO: Migrate to KotlinPoet
@@ -39,6 +40,10 @@ class KotlinKodeinModuleBuilder(
         return args.joinToString(separator = ", ") {
             val variableAsElement = processingEnv.typeUtils.asElement(it.asType())
             val description = "${it.simpleName}: ${variableAsElement.asType().asTypeName()}"
+
+            val named = it.getAnnotation(Named::class.java)
+            if (named != null)
+                return@joinToString "/* $description */ ${injectionMethodNamed(named)}"
 
             val tagged = it.getAnnotation(Tagged::class.java)
 

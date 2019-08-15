@@ -3,6 +3,7 @@ apply plugin: 'kotlin'
 
 
 dependencies {
+    api group: 'javax.inject', name: 'javax.inject', version: '1'
 }
 
 sourceCompatibility = "7"
