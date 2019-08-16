@@ -44,15 +44,18 @@ class KotlinKodeinModuleBuilder(
             val description = "${it.simpleName}: ${variableAsElement.asType().asTypeName()}"
 
             val named = it.getAnnotation(Named::class.java)
-            if (named != null)
-                return@joinToString "/* $description */ ${injectionMethodNamed(named)}"
 
-            val tagged = it.getAnnotation(Tagged::class.java)
+            val injection: String
 
-            return@joinToString if (tagged != null)
-                "/* $description */ ${injectionMethodTagged(tagged)}"
-            else
-                "/* $description */ $INJECTION_METHOD_INVOKED"
+            injection = if (named != null) {
+                injectionMethodNamed(named)
+            } else {
+                val tagged = it.getAnnotation(Tagged::class.java)
+
+                if (tagged != null) injectionMethodTagged(tagged)
+                else INJECTION_METHOD_INVOKED
+            }
+            return@joinToString "/* $description */ $injection"
         }
     }
 
