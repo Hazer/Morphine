@@ -2,7 +2,7 @@
 
 package io.vithor.libs.morphine.codegen
 
-import io.vithor.kodein.sulfate.Tagged
+import io.vithor.libs.morphine.Tagged
 import javax.inject.Named
 
 const val INJECTION_METHOD = "instance"

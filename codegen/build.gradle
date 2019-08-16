@@ -21,7 +21,9 @@ dependencies {
     kapt project(Modules.annotations)
     compileOnly project(Modules.annotations)
     implementation Libraries.kodeinJvm
-    api KotlinLibraries.kotlinJvm
+    kapt Libraries.kodeinJvm
+    implementation KotlinLibraries.kotlinJvm
+    kapt KotlinLibraries.kotlinJvm
 
     implementation 'com.squareup:kotlinpoet:1.2.0'
 

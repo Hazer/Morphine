@@ -1,6 +1,8 @@
 package io.vithor.libs.morphine.codegen
 
 import com.squareup.kotlinpoet.asTypeName
+import io.vithor.libs.morphine.Injector
+import io.vithor.libs.morphine.RetrofitInjector
 import java.io.File
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.Messager
@@ -9,6 +11,7 @@ import javax.annotation.processing.RoundEnvironment
 import javax.inject.Inject
 import javax.inject.Named
 import javax.lang.model.SourceVersion
+import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.TypeElement
@@ -55,7 +58,20 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
     ): Boolean {
 
         roundEnvironment?.getElementsAnnotatedWith(Inject::class.java)?.forEach {
-            throw IllegalStateException("Found ${it.simpleName}")
+            when (it.kind) {
+                ElementKind.CLASS -> {
+                    val className = it.simpleName.toString()
+                    val typeEl = it as TypeElement
+
+                    generateForClass(typeEl, it, className)
+                }
+                ElementKind.CONSTRUCTOR -> {
+                    val typeEl = (it.enclosingElement as TypeElement)
+                    val className = typeEl.simpleName.toString()
+                    generateForClass(typeEl, typeEl, className)
+                    // generateForConstructor(it)
+                }
+            } 
         }
 
         roundEnvironment?.getElementsAnnotatedWith(Injector::class.java)
@@ -63,25 +79,7 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
                 val className = it.simpleName.toString()
                 val typeEl = it as TypeElement
 
-                // typeEl.enclosingElement
-
-                val superClassTypeName =
-                    typeEl.superclass.asTypeName().toString().substringAfterLast('.')
-
-                val constructorElm =
-                    it.enclosedElements.first { element -> element.kind == ElementKind.CONSTRUCTOR } as? ExecutableElement
-
-                val pack = processingEnv.elementUtils.getPackageOf(it).toString()
-
-                val importOnce: Boolean = typeEl.getAnnotation(Injector::class.java).importOnce
-
-                generateModuleOfClass(
-                    superClassTypeName,
-                    importOnce,
-                    className,
-                    pack,
-                    constructorElm
-                )
+                generateForClass(typeEl, it, className)
             }
 
         roundEnvironment?.getElementsAnnotatedWith(RetrofitInjector::class.java)
@@ -107,6 +105,32 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
         }
 
         return true
+    }
+
+    private fun generateForClass(
+        typeEl: TypeElement,
+        element: Element,
+        className: String
+    ) {
+        // typeEl.enclosingElement
+
+        val superClassTypeName =
+            typeEl.superclass.asTypeName().toString().substringAfterLast('.')
+
+        val constructorElm =
+            element.enclosedElements.first { element -> element.kind == ElementKind.CONSTRUCTOR } as? ExecutableElement
+
+        val pack = processingEnv.elementUtils.getPackageOf(element).toString()
+
+        val importOnce: Boolean = typeEl.getAnnotation(Injector::class.java)?.importOnce ?: false
+
+        generateModuleOfClass(
+            superClassTypeName,
+            importOnce,
+            className,
+            pack,
+            constructorElm
+        )
     }
 
     // TODO: Migrate to KotlinPoet

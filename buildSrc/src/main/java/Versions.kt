@@ -39,7 +39,7 @@ object Versions {
 
     // Other
     const val coroutines = "1.2.1"
-    const val kodein = "6.3.3"
+    const val kodein = "6.0.1"
     const val timber = "4.7.1"
     const val threeten = "1.2.0"
     const val kotlinxSerialization = "0.11.0"

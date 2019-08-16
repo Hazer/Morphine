@@ -1,7 +1,7 @@
 package io.vithor.libs.morphine.codegen
 
 import com.squareup.kotlinpoet.asTypeName
-import io.vithor.kodein.sulfate.Tagged
+import io.vithor.libs.morphine.Tagged
 import javax.annotation.processing.ProcessingEnvironment
 import javax.inject.Named
 import javax.lang.model.element.ExecutableElement

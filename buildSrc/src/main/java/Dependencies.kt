@@ -4,20 +4,12 @@ object Libraries {
 
     // KODEIN
     const val kodeinJvm = "org.kodein.di:kodein-di-erased-jvm:${Versions.kodein}"
-    // ROOM
-    const val roomCompiler = "androidx.room:room-compiler:${Versions.room}"
-    const val roomRunTime = "androidx.room:room-runtime:${Versions.room}"
-    const val roomExtensions = "androidx.room:room-ktx:${Versions.room}"
     // RETROFIT
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
     const val retrofitCoroutineAdapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:${Versions.retrofitCoroutines}"
     const val retrofitKotlinSerializerConverter = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:${Versions.retrofitKotlinSerialization}"
     const val httpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okHttp}"
     const val ok2curl = "com.github.mrmike:ok2curl:${Versions.ok2curl}"
-    // GLIDE
-    const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
-
-    const val databinding = "androidx.databinding:databinding-compiler:${Versions.databinding}"
 }
 
 object KotlinLibraries {
@@ -32,7 +24,7 @@ object KotlinLibraries {
 object AndroidLibraries {
     // KOTLIN
     const val kotlinCoroutineAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
-    const val kodeinAndroid = "org.kodein.di:kodein-di-framework-android-x:${Versions.kodein}"
+    const val kodein = "org.kodein.di:kodein-di-framework-android-x:${Versions.kodein}"
     // ANDROID
     const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
     const val appCompatResources = "androidx.appcompat:appcompat-resources:${Versions.appCompat}"
@@ -47,8 +39,6 @@ object AndroidLibraries {
     const val navigationFrag = "androidx.navigation:navigation-fragment-ktx:${Versions.nav}"
 
     const val material = "com.google.android.material:material:${Versions.androidMaterial}"
-
-    const val databinding = Libraries.databinding
 
     const val threetenAbp = "com.jakewharton.threetenabp:threetenabp:${Versions.threeten}"
 
@@ -75,6 +65,4 @@ object TestLibraries {
     const val mockk = "io.mockk:mockk:${Versions.mockk}"
     // COROUTINE
     const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
-    // DATA BINDING
-    const val databinding = Libraries.databinding
 }
