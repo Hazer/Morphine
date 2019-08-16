@@ -12,6 +12,7 @@ const val INJECTION_METHOD_INVOKED = "$INJECTION_METHOD()"
 // TODO: Migrate to KotlinPoet
 inline fun simpleProviderModule(
     erased: Boolean = true,
+    isSingleton: Boolean,
     className: String,
     packageName: String,
     originClassName: String,
@@ -24,19 +25,26 @@ inline fun simpleProviderModule(
         import org.kodein.di.Kodein
         import org.kodein.di.$kodeinType.bind
         import org.kodein.di.$kodeinType.instance
-        import org.kodein.di.$kodeinType.provider
+        import org.kodein.di.$kodeinType.${provision(isSingleton)}
 
         import $packageName.$originClassName
 
         val $className = Kodein.Module(prefix = "$packageName", name = "$originClassName") {
-            bind<$originClassName>() with provider { $originClassName($constructorArgs) }
+            bind<$originClassName>() with ${provision(isSingleton)} { $originClassName($constructorArgs) }
         }
 
     """.trimIndent()
 }
 
+inline fun provision(isSingleton: Boolean) =
+    if (isSingleton) "singleton" else "provider"
+
+inline fun factoryProvision(isMultiton: Boolean) =
+    if (isMultiton) "multiton" else "factory"
+
 inline fun retrofitFactoryModule(
     erased: Boolean = true,
+    isMultiton: Boolean,
     className: String,
     packageName: String,
     originClassName: String
@@ -47,13 +55,13 @@ inline fun retrofitFactoryModule(
 
         import org.kodein.di.Kodein
         import org.kodein.di.$kodeinType.bind
-        import org.kodein.di.$kodeinType.factory
+        import org.kodein.di.$kodeinType.${factoryProvision(isMultiton)}
         import retrofit2.Retrofit
 
         import $packageName.$originClassName
 
         val $className = Kodein.Module(prefix = "$packageName", name = "$originClassName") {
-            bind<$originClassName>() with factory { retrofit: Retrofit ->
+            bind<$originClassName>() with ${factoryProvision(isMultiton)} { retrofit: Retrofit ->
                 retrofit.create($originClassName::class.java)
             }
         }

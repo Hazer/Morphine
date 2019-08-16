@@ -10,6 +10,7 @@ import javax.lang.model.element.ExecutableElement
 class KotlinKodeinModuleBuilder(
     override val erased: Boolean,
     override val importOnce: Boolean,
+    override val singleton: Boolean,
     override val superClassTypeName: String,
     override val className: String,
     override val packageName: String,
@@ -26,6 +27,7 @@ class KotlinKodeinModuleBuilder(
 
     private val contentTemplate = simpleProviderModule(
         erased,
+        singleton,
         className,
         packageName,
         originClassName,

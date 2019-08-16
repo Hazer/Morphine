@@ -3,6 +3,7 @@ package io.vithor.libs.morphine.codegen
 interface ModuleBuilder {
     val erased: Boolean
     val importOnce: Boolean
+    val singleton: Boolean
     val superClassTypeName: String
     val className: String
     val packageName: String

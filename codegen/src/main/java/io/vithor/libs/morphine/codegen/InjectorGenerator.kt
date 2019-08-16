@@ -10,6 +10,7 @@ import javax.annotation.processing.ProcessingEnvironment
 import javax.annotation.processing.RoundEnvironment
 import javax.inject.Inject
 import javax.inject.Named
+import javax.inject.Singleton
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
@@ -95,9 +96,11 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
                 val pack = processingEnv.elementUtils.getPackageOf(it).toString()
 
                 val importOnce: Boolean =
-                    typeEl.getAnnotation(RetrofitInjector::class.java).importOnce
+                    typeEl.getAnnotation(RetrofitInjector::class.java)?.importOnce ?: false
 
-                generateModuleOfAPI(superClassTypeName, importOnce, className, pack)
+                val singleton = typeEl.getAnnotation(Singleton::class.java) != null
+
+                generateModuleOfAPI(superClassTypeName, importOnce, singleton, className, pack)
             }
 
         if (roundEnvironment!!.processingOver()) {
@@ -119,17 +122,20 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
             typeEl.superclass.asTypeName().toString().substringAfterLast('.')
 
         val constructorElm = element.enclosedElements
-                .filter { it.kind == ElementKind.CONSTRUCTOR }
-                .map { it as ExecutableElement }
-                .minBy { it.parameters.size }
+            .filter { it.kind == ElementKind.CONSTRUCTOR }
+            .map { it as ExecutableElement }
+            .minBy { it.parameters.size }
 
         val pack = processingEnv.elementUtils.getPackageOf(element).toString()
 
         val importOnce: Boolean = typeEl.getAnnotation(Injector::class.java)?.importOnce ?: false
 
+        val singleton = typeEl.getAnnotation(Singleton::class.java) != null
+
         generateModuleOfClass(
             superClassTypeName,
             importOnce,
+            singleton,
             className,
             pack,
             constructorElm
@@ -188,6 +194,7 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
     private fun generateModuleOfClass(
         superClassTypeName: String,
         importOnce: Boolean,
+        singleton: Boolean,
         originalClassName: String,
         pack: String,
         constructorElm: ExecutableElement?
@@ -197,6 +204,7 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
         val generatedClass = KotlinKodeinModuleBuilder(
             isKodeinErased,
             importOnce,
+            singleton,
             superClassTypeName,
             newClassName,
             pack,
@@ -228,6 +236,7 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
     private fun generateModuleOfAPI(
         superClassTypeName: String,
         importOnce: Boolean,
+        singleton: Boolean,
         originalClassName: String,
         pack: String
     ) {
@@ -236,6 +245,7 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
         val generatedClass = RetrofitModuleBuilder(
             isKodeinErased,
             importOnce,
+            singleton,
             superClassTypeName,
             newClassName,
             pack,

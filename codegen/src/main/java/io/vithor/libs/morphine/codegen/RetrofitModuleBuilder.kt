@@ -1,11 +1,13 @@
 package io.vithor.libs.morphine.codegen
 
-class RetrofitModuleBuilder(override val erased: Boolean,
-                                override val importOnce: Boolean,
-                                override val superClassTypeName: String,
-                                override val className: String,
-                                override val packageName: String,
-                                override val originClassName: String
+class RetrofitModuleBuilder(
+    override val erased: Boolean,
+    override val importOnce: Boolean,
+    override val singleton: Boolean,
+    override val superClassTypeName: String,
+    override val className: String,
+    override val packageName: String,
+    override val originClassName: String
 ) : ModuleBuilder {
     override val qualifiedName: String = "$packageName.$className"
 
@@ -15,6 +17,7 @@ class RetrofitModuleBuilder(override val erased: Boolean,
 
     private val contentTemplate = retrofitFactoryModule(
         erased,
+        singleton,
         className,
         packageName,
         originClassName
