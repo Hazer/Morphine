@@ -45,7 +45,8 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
             Injector::class.java.name,
             RetrofitInjector::class.java.name,
             Inject::class.java.name,
-            Named::class.java.name)
+            Named::class.java.name
+        )
     }
 
     override fun getSupportedSourceVersion(): SourceVersion {
@@ -71,7 +72,7 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
                     generateForClass(typeEl, typeEl, className)
                     // generateForConstructor(it)
                 }
-            } 
+            }
         }
 
         roundEnvironment?.getElementsAnnotatedWith(Injector::class.java)
@@ -117,8 +118,10 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
         val superClassTypeName =
             typeEl.superclass.asTypeName().toString().substringAfterLast('.')
 
-        val constructorElm =
-            element.enclosedElements.first { element -> element.kind == ElementKind.CONSTRUCTOR } as? ExecutableElement
+        val constructorElm = element.enclosedElements
+                .filter { it.kind == ElementKind.CONSTRUCTOR }
+                .map { it as ExecutableElement }
+                .minBy { it.parameters.size }
 
         val pack = processingEnv.elementUtils.getPackageOf(element).toString()
 
@@ -206,7 +209,9 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
             mutableListOf()
         }
 
-        actual.add(generatedClass)
+        if (actual.none { it.groupQualifiedName == generatedClass.groupQualifiedName }) {
+            actual.add(generatedClass)
+        }
 
         imports[generatedClass.groupQualifiedName] = actual
 

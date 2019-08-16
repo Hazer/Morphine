@@ -41,7 +41,8 @@ class MainFragment : Fragment(), KodeinAware {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProviders.of(this, provider).get(MainViewModel::class.java)
-        view.findViewById<TextView>(R.id.message).text = viewModel.namedArg.aow
+        view.findViewById<TextView>(R.id.message).text =
+            "${viewModel.testArg.aow}-${viewModel.namedArg.aow}"
     }
 
 }
