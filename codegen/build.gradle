@@ -2,6 +2,10 @@ apply plugin: 'java-library'
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 
+group = 'io.vithor.libs'
+version = Versions.morphine
+archivesBaseName = 'morphine-abs-codegen'
+
 sourceSets {
     main {
         java {
@@ -35,3 +39,11 @@ dependencies {
 
 sourceCompatibility = "7"
 targetCompatibility = "7"
+
+ext {
+    packagingMode = 'jar'
+    PUBLISH_ARTIFACT_ID = archivesBaseName
+    libsDesc = "Morphine's Abstract Codegen compiler"
+}
+
+apply from: '../gradle/android-publish.gradle'

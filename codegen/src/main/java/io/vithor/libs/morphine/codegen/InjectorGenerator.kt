@@ -118,9 +118,13 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
     ) {
         // typeEl.enclosingElement
 
+        // Gets superclass without generics info
         val superClassTypeName =
-            typeEl.superclass.asTypeName().toString().substringAfterLast('.')
+            typeEl.superclass.asTypeName().toString()
+                .substringBefore('<') // Remove generics info
+                .substringAfterLast('.') // Remove package info
 
+        // Gets constructor with less arguments
         val constructorElm = element.enclosedElements
             .filter { it.kind == ElementKind.CONSTRUCTOR }
             .map { it as ExecutableElement }

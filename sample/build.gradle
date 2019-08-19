@@ -24,11 +24,17 @@ android {
     }
 }
 
+repositories {
+//    mavenLocal()
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(Modules.annotations)
     kapt project(Modules.erased)
+//    implementation("io.vithor.libs:morphine-api:${Versions.morphine}")
+//    kapt("io.vithor.libs:morphine-erased-codegen:${Versions.morphine}")
 
     implementation KotlinLibraries.kotlinJvm
     implementation Libraries.kodeinJvm
