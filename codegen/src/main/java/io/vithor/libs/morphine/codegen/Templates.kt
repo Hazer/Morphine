@@ -107,7 +107,7 @@ inline fun allModulesTemplate(
 
                 import org.kodein.di.Kodein
 
-                val AllInjectors = Kodein.Module(prefix = "$commonPackage", name = "AllInjectors") {
+                val allModules = Kodein.Module(prefix = "$commonPackage", name = "allModules") {
                     ${StringBuilder().apply {
         for (key in imports.keys) {
             generateModule(key)

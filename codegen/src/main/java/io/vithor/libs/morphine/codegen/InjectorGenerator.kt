@@ -158,7 +158,7 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
 
         val kaptKotlinGeneratedDir = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME]
         val file =
-            File(kaptKotlinGeneratedDir, "${commonPackage.replace('.', '_')}_AllInjectors.kt")
+            File(kaptKotlinGeneratedDir, "${commonPackage.replace('.', '_')}_AllModules.kt")
         file.writeText(injector)
     }
 

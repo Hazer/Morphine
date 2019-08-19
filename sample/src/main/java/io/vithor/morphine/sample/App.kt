@@ -2,7 +2,7 @@ package io.vithor.morphine.sample
 
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider
-import io.vithor.morphine.sample.ui.main.AllInjectors
+import io.vithor.morphine.sample.ui.main.*
 import io.vithor.morphine.sample.ui.main.Xablau
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -19,6 +19,6 @@ class App : Application(), KodeinAware {
 
         bind<Xablau>(tag = "OTO") with provider { Xablau("Nomeado") }
 
-        import(AllInjectors)
+        import(allModules)
     }
 }

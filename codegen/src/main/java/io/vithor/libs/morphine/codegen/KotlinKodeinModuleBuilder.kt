@@ -21,9 +21,9 @@ class KotlinKodeinModuleBuilder(
 ) : ModuleBuilder {
     override val qualifiedName: String = "$packageName.$className"
 
-    override val groupName = "${superClassTypeName}_Injectors"
+    override val groupName = "${superClassTypeName}_Modules"
 
-    override val groupQualifiedName = "$packageName.${superClassTypeName}_Injectors"
+    override val groupQualifiedName = "$packageName.${superClassTypeName}_Modules"
 
     private val contentTemplate = simpleProviderModule(
         erased,
