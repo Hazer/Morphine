@@ -156,7 +156,7 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
             return@fold acc.takeWhileIndexed { index, char ->
                 next.getOrNull(index) == char
             }
-        }.removeSuffix(".")
+        }.substringBeforeLast('.')
 
         val injector = allModulesTemplate(commonPackage, imports, ::generateModuleOfClassModules)
 
