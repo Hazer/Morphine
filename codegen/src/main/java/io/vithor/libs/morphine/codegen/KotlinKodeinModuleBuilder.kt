@@ -23,7 +23,7 @@ class KotlinKodeinModuleBuilder(
 
     override val groupName = "${superClassTypeName}_Modules"
 
-    override val groupQualifiedName = "$packageName.${superClassTypeName}_Modules"
+    override val groupQualifiedName = "$packageName.$groupName"
 
     private val contentTemplate = simpleProviderModule(
         erased,

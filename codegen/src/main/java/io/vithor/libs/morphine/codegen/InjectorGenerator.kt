@@ -268,7 +268,9 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
             mutableListOf()
         }
 
-        actual.add(generatedClass)
+        if (actual.none { it.groupQualifiedName == generatedClass.groupQualifiedName }) {
+            actual.add(generatedClass)
+        }
 
         imports[generatedClass.groupQualifiedName] = actual
 

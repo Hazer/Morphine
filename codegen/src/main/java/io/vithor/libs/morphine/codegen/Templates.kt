@@ -29,7 +29,7 @@ inline fun simpleProviderModule(
 
         import $packageName.$originClassName
 
-        val $className = Kodein.Module(prefix = "$packageName", name = "$originClassName") {
+        val $className = Kodein.Module(prefix = "$packageName", name = "$packageName.$originClassName") {
             bind<$originClassName>() with ${provision(isSingleton)} { $originClassName($constructorArgs) }
         }
 
@@ -60,7 +60,7 @@ inline fun retrofitFactoryModule(
 
         import $packageName.$originClassName
 
-        val $className = Kodein.Module(prefix = "$packageName", name = "$originClassName") {
+        val $className = Kodein.Module(prefix = "$packageName", name = "$packageName.$originClassName") {
             bind<$originClassName>() with ${factoryProvision(isMultiton)} { retrofit: Retrofit ->
                 retrofit.create($originClassName::class.java)
             }
@@ -89,7 +89,7 @@ inline fun groupModuleTemplate(
 
                 import org.kodein.di.Kodein
 
-                val $groupName = Kodein.Module(prefix = "$packageName", name = "$groupName") {
+                val $groupName = Kodein.Module(prefix = "$packageName", name = "$packageName.$groupName") {
                     ${imports.joinToString("\n                ") { "${importMethod(it)}(${it.qualifiedName})" }}
                 }
 
@@ -107,7 +107,7 @@ inline fun allModulesTemplate(
 
                 import org.kodein.di.Kodein
 
-                val allModules = Kodein.Module(prefix = "$commonPackage", name = "allModules") {
+                val allModules = Kodein.Module(prefix = "$commonPackage", name = "$commonPackage.allModules") {
                     ${StringBuilder().apply {
         for (key in imports.keys) {
             generateModule(key)
