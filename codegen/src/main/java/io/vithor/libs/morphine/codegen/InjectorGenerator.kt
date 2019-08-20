@@ -148,15 +148,23 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
 
     // TODO: Migrate to KotlinPoet
     private fun generateAllModules() {
-        val commonPackage = imports.keys.map { it.substringBeforeLast('.') }.fold("") { acc, next ->
-            if (acc.isBlank()) return@fold next
+        val commonPackage =
+            if (imports.keys.size == 1)
+                imports.keys.first().substringBeforeLast('.')
+            else imports.keys.map { it.substringBeforeLast('.') }.fold("") { acc, next ->
+                if (acc.isBlank()) return@fold next
 
-            if (next.isBlank()) throw IllegalStateException("Module package must not be empty, generation failed")
+                if (next.isBlank()) throw IllegalStateException("Module package must not be empty, generation failed")
 
-            return@fold acc.takeWhileIndexed { index, char ->
-                next.getOrNull(index) == char
+                return@fold acc.takeWhileIndexed { index, char ->
+                    next.getOrNull(index) == char
+                }
+            }.let {
+                if (it.endsWith('.'))
+                    it.removeSuffix(".")
+                else
+                    it.substringBeforeLast('.')
             }
-        }.substringBeforeLast('.')
 
         val injector = allModulesTemplate(commonPackage, imports, ::generateModuleOfClassModules)
 
