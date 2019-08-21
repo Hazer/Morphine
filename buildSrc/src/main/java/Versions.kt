@@ -12,7 +12,7 @@ object Versions {
     const val targetSdk = 28
 
     // Morphine
-    const val morphine = "0.0.7"
+    const val morphine = "0.0.8"
 
     const val kodein = "6.0.1"
 }
