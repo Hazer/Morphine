@@ -2,23 +2,22 @@
 //apply plugin: "com.github.ben-manes.versions"
 
 buildscript {
-    ext.kotlin_version = Versions.Libs.kotlin
     repositories {
         google()
         gradlePluginPortal()
         mavenCentral()
         jcenter()
-        maven { url "https://kotlin.bintray.com/kotlinx" }
-        maven { url "https://dl.bintray.com/kodein-framework/Kodein-DI/" }
-        maven { url "https://dl.bintray.com/hazer/maven" }
+        maven(url = "https://kotlin.bintray.com/kotlinx")
+        maven(url = "https://dl.bintray.com/kodein-framework/Kodein-DI/")
+        maven(url = "https://dl.bintray.com/hazer/maven")
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:3.5.0"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Libs.kotlin}"
-        classpath "org.jetbrains.kotlin:kotlin-serialization:${Versions.Libs.kotlin}"
-        classpath "org.jetbrains.kotlin:kotlin-allopen:${Versions.Libs.kotlin}"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath("com.android.tools.build:gradle:3.5.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.Libs.kotlin}")
+        classpath("org.jetbrains.kotlin:kotlin-serialization:${Versions.Libs.kotlin}")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:${Versions.Libs.kotlin}")
+        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4")
+        classpath("com.github.dcendents:android-maven-gradle-plugin:2.1")
         // classpath "com.github.ben-manes:gradle-versions-plugin:${Versions.versionsChecker}"
         // classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.6'
 
@@ -34,13 +33,12 @@ allprojects {
         google()
         mavenCentral()
         jcenter()
-        maven { url "https://kotlin.bintray.com/kotlinx" }
-        maven { url "https://dl.bintray.com/kodein-framework/Kodein-DI/" }
-        maven { url "https://dl.bintray.com/hazer/maven" }
-
+        maven(url = "https://kotlin.bintray.com/kotlinx")
+        maven(url = "https://dl.bintray.com/kodein-framework/Kodein-DI/")
+        maven(url = "https://dl.bintray.com/hazer/maven")
     }
 
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
         kotlinOptions {
             jvmTarget = "1.8"
             freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
@@ -48,17 +46,17 @@ allprojects {
     }
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
     kotlinOptions {
         jvmTarget = "1.8"
         freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
     }
 }
 
-wrapper {
+tasks.getByName<Wrapper>("wrapper") {
     distributionType = Wrapper.DistributionType.ALL
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+tasks.register("clean", Delete::class) {
+    delete(rootProject.buildDir)
 }

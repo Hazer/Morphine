@@ -18,11 +18,11 @@ pluginManagement {
 }
 
 //enableFeaturePreview('GRADLE_METADATA')
+rootProject.buildFileName = "build.gradle.kts"
 
-
-include Modules.annotations,
+include(Modules.annotations,
         Modules.core,
         Modules.erased,
-        Modules.generic
+        Modules.generic)
 
-include Modules.sample
+include(Modules.sample)

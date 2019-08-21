@@ -36,10 +36,9 @@ dependencies {
 //    implementation("io.vithor.libs:morphine-api:${Versions.morphine}")
 //    kapt("io.vithor.libs:morphine-erased-codegen:${Versions.morphine}")
 
-    implementation KotlinLibraries.kotlinJvm
-    implementation Libraries.kodeinJvm
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
+    implementation "org.kodein.di:kodein-di-erased-jvm:${Versions.kodein}"
 
-    implementation AndroidLibraries.kodein
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.core:core-ktx:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
