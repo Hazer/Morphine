@@ -24,8 +24,6 @@ repositories {
 dependencies {
     kapt project(Modules.annotations)
     compileOnly project(Modules.annotations)
-    implementation Libraries.kodeinJvm
-    kapt Libraries.kodeinJvm
     implementation KotlinLibraries.kotlinJvm
     kapt KotlinLibraries.kotlinJvm
 

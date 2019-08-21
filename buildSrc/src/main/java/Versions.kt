@@ -3,14 +3,14 @@
 object Versions {
     // Build
     const val kotlin = "1.3.41"
-    const val gradle = "3.5.0-rc03"
+    const val gradle = "3.5.0"
 
     const val compileSdk = 28
     const val minSdk = 21
     const val targetSdk = 28
 
     // Morphine
-    const val morphine = "0.0.7"
+    const val morphine = "0.0.8"
 
     // AndroidX
     const val appCompat = "1.1.0-alpha05"
