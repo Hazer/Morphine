@@ -11,10 +11,9 @@ dependencies {
     kapt(project(Modules.Morphine.annotations))
     compileOnly(project(Modules.Morphine.annotations))
 
-    api(project(Modules.Morphine.core))
+    implementation(project(Modules.Morphine.core))
 
     implementation(Dependencies.kotlin())
-    implementation(Dependencies.kodeinGenerics())
 
     // configuration generator for service providers
     implementation("com.google.auto.service:auto-service:1.0-rc5")

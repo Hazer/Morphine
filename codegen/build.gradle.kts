@@ -6,13 +6,6 @@ group = "io.vithor.libs"
 version = Versions.Libs.morphine
 val archivesBaseName = "morphine-abs-codegen"
 
-repositories {
-    google()
-    mavenCentral()
-    jcenter()
-    maven(url="https://kotlin.bintray.com/kotlinx")
-}
-
 dependencies {
     kapt(project(Modules.Morphine.annotations))
     compileOnly(project(Modules.Morphine.annotations))
@@ -21,8 +14,6 @@ dependencies {
 
     implementation(Dependencies.kotlin())
     kapt(Dependencies.kotlin())
-    implementation(Dependencies.kodeinCore())
-    kapt(Dependencies.kodeinCore())
 
     // configuration generator for service providers
     implementation("com.google.auto.service:auto-service:1.0-rc5")
