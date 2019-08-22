@@ -229,7 +229,7 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
             mutableListOf()
         }
 
-        if (actual.none { it.groupQualifiedName == generatedClass.groupQualifiedName }) {
+        if (actual.none { it.qualifiedName == generatedClass.qualifiedName }) {
             actual.add(generatedClass)
         }
 
@@ -268,7 +268,7 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
             mutableListOf()
         }
 
-        if (actual.none { it.groupQualifiedName == generatedClass.groupQualifiedName }) {
+        if (actual.none { it.qualifiedName == generatedClass.qualifiedName }) {
             actual.add(generatedClass)
         }
 
