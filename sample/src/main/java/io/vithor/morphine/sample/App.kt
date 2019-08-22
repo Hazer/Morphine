@@ -2,7 +2,7 @@ package io.vithor.morphine.sample
 
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider
-import io.vithor.morphine.sample.ui.main.*
+import io.vithor.morphine.sample.gen.allModules
 import io.vithor.morphine.sample.ui.main.Xablau
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware

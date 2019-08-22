@@ -39,6 +39,8 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
         messager = processingEnv.messager
 
         imports = mutableMapOf()
+
+
     }
 
     override fun getSupportedAnnotationTypes(): MutableSet<String> {
@@ -148,29 +150,25 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
 
     // TODO: Migrate to KotlinPoet
     private fun generateAllModules() {
-        val commonPackage =
-            if (imports.keys.size == 1)
-                imports.keys.first().substringBeforeLast('.')
-            else imports.keys.map { it.substringBeforeLast('.') }.fold("") { acc, next ->
-                if (acc.isBlank()) return@fold next
+        val mainPackageName = processingEnv.options.get("MAIN_PACKAGE")
 
-                if (next.isBlank()) throw IllegalStateException("Module package must not be empty, generation failed")
-
-                return@fold acc.takeWhileIndexed { index, char ->
-                    next.getOrNull(index) == char
-                }
-            }.let {
-                if (it.endsWith('.'))
-                    it.removeSuffix(".")
-                else
-                    it.substringBeforeLast('.')
-            }
+        val commonPackage = mainPackageName
+            ?: throw IllegalStateException("Module package must not be empty, generation failed")
 
         val injector = allModulesTemplate(commonPackage, imports, ::generateModuleOfClassModules)
 
         val kaptKotlinGeneratedDir = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME]
+
+        val path = commonPackage.replace('.', '/')
+
+        val pathFile = File(kaptKotlinGeneratedDir, path)
+        pathFile.mkdirs()
+//        val finalPath = if (pathFile.exists()) pathFile else File(kaptKotlinGeneratedDir)
+        val finalPath = pathFile
+
         val file =
-            File(kaptKotlinGeneratedDir, "${commonPackage.replace('.', '_')}_AllModules.kt")
+            File(finalPath, "${commonPackage.replace('.', '_')}_AllModules.kt")
+
         file.writeText(injector)
     }
 
@@ -198,7 +196,17 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
         val injector = groupModuleTemplate(packageName, groupName, imports)
 
         val kaptKotlinGeneratedDir = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME]
-        val file = File(kaptKotlinGeneratedDir, "${groupQualifiedName.replace('.', '_')}.kt")
+
+        val path = groupQualifiedName.substringBeforeLast('.')
+            .replace('.', '/')
+            .replace('_', '/')
+
+        val pathFile = File(kaptKotlinGeneratedDir, path)
+        pathFile.mkdirs()
+//        val finalPath = if (pathFile.exists()) pathFile else File(kaptKotlinGeneratedDir)
+        val finalPath = pathFile
+
+        val file = File(finalPath, "${groupQualifiedName.replace('.', '_')}.kt")
         file.writeText(injector)
     }
 
@@ -239,7 +247,14 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
 
         val kaptKotlinGeneratedDir = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME]
 
-        val file = File(kaptKotlinGeneratedDir, "${pack.replace('.', '_')}.$newClassName.kt")
+        val path = pack.replace('.', '/').replace('_', '/')
+
+        val pathFile = File(kaptKotlinGeneratedDir, path)
+        pathFile.mkdirs()
+//        val finalPath = if (pathFile.exists()) pathFile else File(kaptKotlinGeneratedDir)
+        val finalPath = pathFile
+
+        val file = File(finalPath, "${pack.replace('.', '_')}_$newClassName.kt")
 
         file.writeText(fileContent)
     }
@@ -278,7 +293,14 @@ abstract class InjectorGenerator(val isKodeinErased: Boolean = true) : AbstractP
 
         val kaptKotlinGeneratedDir = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME]
 
-        val file = File(kaptKotlinGeneratedDir, "${pack.replace('.', '_')}.$newClassName.kt")
+        val path = pack.replace('.', '/').replace('_', '/')
+
+        val pathFile = File(kaptKotlinGeneratedDir, path)
+        pathFile.mkdirs()
+//        val finalPath = if (pathFile.exists()) pathFile else File(kaptKotlinGeneratedDir)
+        val finalPath = pathFile
+
+        val file = File(finalPath, "${pack.replace('.', '_')}_$newClassName.kt")
 
         file.writeText(fileContent)
     }

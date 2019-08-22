@@ -10,7 +10,7 @@ object Versions {
     const val targetSdk = 28
 
     // Morphine
-    const val morphine = "0.0.8"
+    const val morphine = "0.1.0"
 
     // AndroidX
     const val appCompat = "1.1.0-alpha05"

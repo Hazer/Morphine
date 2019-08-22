@@ -9,7 +9,7 @@ archivesBaseName = 'morphine-generic-codegen'
 sourceSets {
     main {
         java {
-            srcDir "${buildDir.absolutePath}/tmp/kapt/main/kotlinGenerated/"
+            srcDir "${buildDir.absolutePath}/tmp/kapt/main/morphineGenerated/"
         }
     }
 }

@@ -24,6 +24,12 @@ android {
     }
 }
 
+kapt {
+    arguments {
+        arg("MAIN_PACKAGE", "io.vithor.morphine.sample.gen")
+    }
+}
+
 repositories {
 //    mavenLocal()
 }
