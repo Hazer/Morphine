@@ -1,10 +1,10 @@
 # Morphine
 Kotlin Kodein Module's generator
 
-# Why?
+## Why?
 We where Dagger users, for a couple of reasons, we decided to migrate to [Kodein](https://github.com/Kodein-Framework/Kodein-DI) as our DI, but manually migrating and creating all injection binds for a big project was a total no-go. To make our lifes easier we created Morphine, it does code generation of classes and constructors annotated with `javax.inject` annotations, its a Kodein companion for a Dagger-like experience.
 
-# Configuring Morphine in Gradle for each Gradle Module do:
+## Configuring Morphine in Gradle for each Gradle Module do:
 
 ```gradle
 dependencies {
@@ -22,7 +22,7 @@ kapt {
 }
 ```
 
-# Acessing generated modules in code:
+## Acessing generated modules in code:
 ```kotlin
 import your.module.package.sample.allModules  // Your sample module package defined earlier 
                                               // in each module's "MAIN_PACKAGE"
