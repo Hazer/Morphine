@@ -9,7 +9,10 @@ import javax.inject.Singleton
 @Singleton
 class Xablau @Inject constructor(val aow: String = "Works")
 
-class MainViewModel @Inject constructor(val testArg: Xablau, @Named("OTO") val namedArg: Xablau) : ViewModel() {
+class MainViewModel @Inject constructor(
+    val testArg: Xablau,
+    @Named("OTO") val namedArg: Xablau
+) : ViewModel() {
 
     init {
         Log.d("InjectorTest", "Injected ${testArg.aow}")

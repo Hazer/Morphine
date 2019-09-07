@@ -15,7 +15,6 @@ import org.kodein.di.erased.instance
 
 class MainFragment : Fragment(), KodeinAware {
     override val kodein by closestKodein()
-
     private val provider by instance<ViewModelProvider.Factory>()
 
     companion object {
@@ -41,6 +40,7 @@ class MainFragment : Fragment(), KodeinAware {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProviders.of(this, provider).get(MainViewModel::class.java)
+
         view.findViewById<TextView>(R.id.message).text =
             "${viewModel.testArg.aow}-${viewModel.namedArg.aow}"
     }

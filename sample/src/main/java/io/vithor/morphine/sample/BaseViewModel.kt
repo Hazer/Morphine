@@ -5,8 +5,8 @@ import javax.inject.Inject
 
 abstract class BaseViewModel<S, C> : ViewModel()
 
-class NavDrawerSharedViewModel @Inject
-constructor() : BaseViewModel<MySharedState, MySharedCommand>()
+class NavDrawerSharedViewModel
+@Inject constructor() : BaseViewModel<MySharedState, MySharedCommand>()
 
 data class MySharedState(
     val loading: Boolean = false
