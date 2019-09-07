@@ -21,6 +21,25 @@ platform :android do
     gradle(task: "test")
   end
 
+  lane :publish do
+    is_releasable = analyze_commits(match: 'v*')
+
+    unless is_releasable
+      UI.message('Nothing to release')
+      next
+    end
+
+    next_version = lane_context[SharedValues::RELEASE_NEXT_VERSION]
+    # generates release notes for this version
+    notes = conventional_changelog(
+      order: ["feat", "fix", "docs"]
+    )
+
+    tag = "v#{next_version}"
+
+    add_git_tag(tag: tag)
+  end 
+
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
     gradle(task: "clean assembleRelease")
