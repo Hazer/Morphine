@@ -21,8 +21,10 @@ pluginManagement {
 
 
 include Modules.annotations,
-        Modules.core,
+        Modules.coreKodein,
         Modules.erased,
-        Modules.generic
+        Modules.generic,
+        Modules.coreKoin
 
-include Modules.sample
+include Modules.sampleKodein,
+        Modules.sampleKoin
