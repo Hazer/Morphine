@@ -10,18 +10,9 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 class App : Application() {
-//    override val kodein = Kodein.lazy {
-//        import(androidXModule(this@App))
-//
-//        bind<ViewModelProvider.Factory>() with singleton { KodeinViewModelFactory(kodein) }
-//
-//        bind<Xablau>(tag = "OTO") with provider { Xablau("Nomeado") }
-//
-//        import(allModules)
-//    }
 
     val appModule = module {
-        factory<Xablau>(named("OTO")) { Xablau("Nomeado") }
+        factory(named("OTO")) { Xablau("Nomeado") }
     }
 
     override fun onCreate() {
