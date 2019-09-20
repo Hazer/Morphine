@@ -1,10 +1,13 @@
 @file:Suppress("MemberVisibilityCanBePrivate", "unused")
 
 object Modules {
-    const val sample = ":sample"
+    const val sampleKodein = ":sample"
+    const val sampleKoin = ":sample-koin"
 
     const val annotations = ":annotations"
-    const val core = ":codegen"
+    const val coreKodein = ":codegen"
+    const val core = coreKodein
+    const val coreKoin = ":codegen-koin"
     const val erased = ":erased-codegen"
     const val generic = ":generic-codegen"
 }
