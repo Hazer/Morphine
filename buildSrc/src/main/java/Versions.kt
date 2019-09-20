@@ -2,7 +2,7 @@
 
 object Versions {
     // Build
-    const val kotlin = "1.3.41"
+    const val kotlin = "1.3.50"
     const val gradle = "3.5.0"
 
     const val compileSdk = 28
