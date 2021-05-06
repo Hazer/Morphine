@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/hallisonoliveira/morphine.svg)](https://jitpack.io/#hallisonoliveira/morphine)
+
 # Morphine
 Kotlin Kodein Module's generator
 
