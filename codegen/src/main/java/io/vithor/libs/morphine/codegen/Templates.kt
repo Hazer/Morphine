@@ -22,14 +22,11 @@ inline fun simpleProviderModule(
     return """
         package $packageName
 
-        import org.kodein.di.Kodein
-        import org.kodein.di.$kodeinType.bind
-        import org.kodein.di.$kodeinType.instance
-        import org.kodein.di.$kodeinType.${provision(isSingleton)}
+        import org.kodein.di.*
 
         import $packageName.$originClassName
 
-        val $className = Kodein.Module(prefix = "$packageName", name = "$packageName.$originClassName") {
+        val $className = DI.Module(prefix = "$packageName", name = "$packageName.$originClassName") {
             bind<$originClassName>() with ${provision(isSingleton)} { $originClassName($constructorArgs) }
         }
 
@@ -53,14 +50,12 @@ inline fun retrofitFactoryModule(
     return """
         package $packageName
 
-        import org.kodein.di.Kodein
-        import org.kodein.di.$kodeinType.bind
-        import org.kodein.di.$kodeinType.${factoryProvision(isMultiton)}
+        import org.kodein.di.*
         import retrofit2.Retrofit
 
         import $packageName.$originClassName
 
-        val $className = Kodein.Module(prefix = "$packageName", name = "$packageName.$originClassName") {
+        val $className = DI.Module(prefix = "$packageName", name = "$packageName.$originClassName") {
             bind<$originClassName>() with ${factoryProvision(isMultiton)} { retrofit: Retrofit ->
                 retrofit.create($originClassName::class.java)
             }
@@ -87,9 +82,9 @@ inline fun groupModuleTemplate(
     return """
                 package $packageName
 
-                import org.kodein.di.Kodein
+                import org.kodein.di.DI
 
-                val $groupName = Kodein.Module(prefix = "$packageName", name = "$packageName.$groupName") {
+                val $groupName = DI.Module(prefix = "$packageName", name = "$packageName.$groupName") {
                     ${imports.joinToString("\n                ") { "${importMethod(it)}(${it.qualifiedName})" }}
                 }
 
@@ -105,9 +100,9 @@ inline fun allModulesTemplate(
     return """
                 package $commonPackage
 
-                import org.kodein.di.Kodein
+                import org.kodein.di.DI
 
-                val allModules = Kodein.Module(prefix = "$commonPackage", name = "$commonPackage.allModules") {
+                val allModules = DI.Module(prefix = "$commonPackage", name = "$commonPackage.allModules") {
                     ${StringBuilder().apply {
         for (key in imports.keys) {
             generateModule(key)

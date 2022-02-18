@@ -9,12 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import io.vithor.morphine.sample.R
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.closestKodein
-import org.kodein.di.erased.instance
+import org.kodein.di.DIAware
+import org.kodein.di.android.x.closestDI
+import org.kodein.di.instance
 
-class MainFragment : Fragment(), KodeinAware {
-    override val kodein by closestKodein()
+class MainFragment : Fragment(), DIAware {
+    override val di by closestDI()
     private val provider by instance<ViewModelProvider.Factory>()
 
     companion object {

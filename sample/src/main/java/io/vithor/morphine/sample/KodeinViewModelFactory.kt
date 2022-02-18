@@ -2,11 +2,11 @@ package io.vithor.morphine.sample
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import org.kodein.di.Kodein
-import org.kodein.di.TT
+import org.kodein.di.DI
 import org.kodein.di.direct
+import org.kodein.type.erased
 
-class KodeinViewModelFactory(private val kodein: Kodein) : ViewModelProvider.Factory {
+class KodeinViewModelFactory(private val di: DI) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
-        kodein.direct.Instance(TT(modelClass))
+        di.direct.Instance(erased(modelClass))
 }

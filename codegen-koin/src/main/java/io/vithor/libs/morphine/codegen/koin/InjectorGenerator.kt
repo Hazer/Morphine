@@ -130,7 +130,7 @@ abstract class InjectorGenerator : AbstractProcessor() {
         val constructorElm = element.enclosedElements
             .filter { it.kind == ElementKind.CONSTRUCTOR }
             .map { it as ExecutableElement }
-            .minBy { it.parameters.size }
+            .minByOrNull { it.parameters.size }
 
         val pack = processingEnv.elementUtils.getPackageOf(element).toString()
 

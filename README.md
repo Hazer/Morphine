@@ -28,9 +28,9 @@ kapt {
 ```kotlin
 import your.module.package.sample.allModules  // Your sample module package defined earlier 
                                               // in each module's "MAIN_PACKAGE"
-import org.kodein.di.Kodein
+import org.kodein.di.DI
 
-val sampleModule = Kodein.Module("My Sample Module") {
+val sampleModule = DI.Module("My Sample Module") {
     import(allModules)
 }
 ```

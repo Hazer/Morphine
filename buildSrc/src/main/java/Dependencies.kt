@@ -3,7 +3,7 @@
 object Libraries {
 
     // KODEIN
-    const val kodeinJvm = "org.kodein.di:kodein-di-erased-jvm:${Versions.kodein}"
+    const val kodeinJvm = "org.kodein.di:kodein-di:${Versions.kodein}"
     // RETROFIT
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
     const val retrofitCoroutineAdapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:${Versions.retrofitCoroutines}"
@@ -14,7 +14,7 @@ object Libraries {
 
 object KotlinLibraries {
     const val kotlinCommon = "org.jetbrains.kotlin:kotlin-stdlib-common:${Versions.kotlin}"
-    const val kotlinJvm = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
+    const val kotlinJvm = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}"
     const val kotlinCoroutineJvmCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     const val kotlinCoroutineCommonCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Versions.coroutines}"
     const val kotlinxSerializationCommon = "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:${Versions.kotlinxSerialization}"

@@ -19,12 +19,12 @@ pluginManagement {
 
 //enableFeaturePreview('GRADLE_METADATA')
 
-
-include Modules.annotations,
-        Modules.coreKodein,
-        Modules.erased,
-        Modules.generic,
-        Modules.coreKoin
-
-include Modules.sampleKodein,
-        Modules.sampleKoin
+include(
+        ":sample",
+        ":sample-koin",
+        ":annotations",
+        ":codegen",
+        ":codegen-koin",
+        ":erased-codegen",
+        ":generic-codegen"
+)
